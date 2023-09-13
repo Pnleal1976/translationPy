@@ -1,7 +1,7 @@
 from googletrans import Translator
 import os
 import speech_recognition as sr
-
+from Translator import MyTranslator, Translator
 from SpeechToText import SpeechToText
 
 def main():
@@ -14,38 +14,42 @@ def main():
         choice = input("Choose an option: ")
 
         if choice == "1":
-            audiofile_path = input("Type the audiofile_path: ")
+            audiofile_path = "Teste2.wav"
             if os.path.isfile(audiofile_path):
                 # Do the audio file processing here
                 print(f"You chose to insert the file: {audiofile_path}")
 
-                # Translation here.
+                # Audio transcription1.
                 stt = SpeechToText()
-                with sr.AudioFile(audiofile_path) as source:
-                    audio = stt.recognizer.record(source)
-                text = stt.convert_speech_to_text(audio=audio)
-                translate_and_print(text)
+                text = stt.convert_audiofile_to_text("Teste2.wav")
+                print("Recognized text: ", text)
             else:
                 print("File Not Found!")
+                break
+
         elif choice == "2":
             stt = SpeechToText()
-            audio = stt.convert_speech_to_text()
+            audioText = stt.convert_speech_to_text(microphone_input=True)
             # Do the processing of the recorded audio here
-            print("Audio recorded successfully!")
+            
 
             # Translation here.
-            text = stt.convert_speech_to_text(audio=audio)
-            translate_and_print(text)
+            translator = Translator()  # Create an instance of the Translator class
+            translated_text = translator.translate(audioText, src='pt', dest='en')  # Use the method to translate
+            print(f"Original text: {audioText}")
+            print(f"Translated text: {translated_text}")
+            break
+           
+
+
         elif choice == "3":
             print("Ending Program.")
             break
         else:
             print("Invalid option! Try again.")
 
-def translate_and_print(text):
-    translator = Translator()
-    translation = translator.translate(text)
-    print(f"{translation.origin} ({translation.src}) --> {translation.text} ({translation.dest})")
+        
+
 
 if __name__ == "__main__":
     main()

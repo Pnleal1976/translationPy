@@ -4,9 +4,9 @@ class SpeechToText:
     def __init__(self):
         self.recognizer = sr.Recognizer()
 
-    def convert_speech_to_text(self, audio=None):
+    def convert_speech_to_text(self, microphone_input=False):
         try:
-            if audio is None:
+            if microphone_input:
                 with sr.Microphone() as source:
                     print("Please say something...")
                     audio = self.recognizer.listen(source)
@@ -24,9 +24,10 @@ class SpeechToText:
             if audiofile_path:
                 with sr.AudioFile(audiofile_path) as source:
                     audio = self.recognizer.record(source)
+                   
 
             else:
-                raise ValueError("You should select an audio file or activate your microphone")
+                raise ValueError("You should select an audio file")
 
             text = self.recognizer.recognize_google(audio, language="pt-BR")  # Recognition using Google Web Speech API
             return text
